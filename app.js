@@ -1,11 +1,13 @@
 const express = require('express')
 const app = express()
+const compression = require('compression')
 const expressWs = require('express-ws')(app);
 const uuid=require('uuid')
 const fs = require('node:fs');
 
 const port = 3010
 
+app.use(compression())
 app.use(express.json());
 app.use(express.static('public'))
 
