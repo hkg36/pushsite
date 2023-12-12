@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const expressWs = require('express-ws')(app);
 const uuid=require('uuid')
+const fs = require('node:fs');
+
 const port = 3010
 
 app.use(express.json());
@@ -33,7 +35,17 @@ app.ws(path,async(ws,req)=>{
     });
 })
 }
-AddBroadcastRouter("/report/gp1")
+
+try {
+  let conffile="/usr/local/pushsite/path.conf"
+  if(!fs.existsSync(conffile)) conffile="path.conf"
+  const data = fs.readFileSync(conffile, 'utf8');
+  for(let l of data.split("\n")){
+    AddBroadcastRouter(l.trim())
+  }
+} catch (err) {
+  console.error(err);
+}
 app.listen(port, () => {
   console.log(`listening on port ${port}`)
 })
