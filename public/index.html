@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>推送测试</title>
+</head>
+<body>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.5.0/axios.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
+<input id="data"/><button id="send">发送</button>
+<div id="resdata"></div>
+<script>
+    var ws = new ReconnectingWebSocket(`ws://${window.location.host}/report/gp1`);
+    $("#send").on("click",async function(){
+        let data=$("#data").val()
+        await axios.post("/report/gp1",json={"data":data})
+    })
+    ws.onmessage=function(event){
+        $("#resdata").append(`<div>${event.data}</div>`)
+    }
+</script>
+</body>
+</html>
