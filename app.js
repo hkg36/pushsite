@@ -37,7 +37,7 @@ app.ws(path,async(ws,req)=>{
 }
 
 try {
-  let conffile="/usr/local/pushsite/path.conf"
+  let conffile="/usr/local/etc/pushsite/path.conf"
   if(!fs.existsSync(conffile)) conffile="path.conf"
   const data = fs.readFileSync(conffile, 'utf8');
   for(let l of data.split("\n")){
