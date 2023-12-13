@@ -27,7 +27,7 @@ function broadcastMessage(msg){
 app.ws(path,async(ws,req)=>{
   var id=uuid.v4()
     clients[id]=ws
-    console.log(id+" connected")
+    console.log(`${id} connected: ${path}`)
     ws.on('close', function() {
         delete clients[id]
         console.log(id+" disconnected")
