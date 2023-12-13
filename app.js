@@ -1,14 +1,34 @@
 const express = require('express')
-const app = express()
+const winston = require('winston');
 const compression = require('compression')
+const app = express()
 const expressWs = require('express-ws')(app);
 const uuid=require('uuid')
 const fs = require('node:fs');
 
 const port = 3010
 
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.splat(),
+    winston.format.simple()
+  ),
+  transports: [
+    new winston.transports.Console()
+  ],
+});
+
+app.use((req, res, next) => {
+  req.logger=logger
+  next()
+})
+
 app.use(compression())
 app.use(express.json());
+app.use(express.raw({limit: '16mb'}))
+app.use(express.text())
+app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
 
 function AddBroadcastRouter(path){
@@ -27,10 +47,10 @@ function broadcastMessage(msg){
 app.ws(path,async(ws,req)=>{
   var id=uuid.v4()
     clients[id]=ws
-    console.log(`${id} connected: ${path}`)
+    req.logger.info(`${id} connected: ${path}`)
     ws.on('close', function() {
         delete clients[id]
-        console.log(id+" disconnected")
+        req.logger.info(id+" disconnected")
     });
     ws.on('message', function(msg) {
 
@@ -45,13 +65,14 @@ try {
   for(let l of data.split("\n")){
     let p=l.trim()
     if(p!=""){
-      console.log(`add path ${p}`)
+      logger.info(`add path ${p}`)
       AddBroadcastRouter(p)
     }
   }
 } catch (err) {
   console.error(err);
 }
+
 app.listen(port, () => {
   console.log(`listening on port ${port}`)
 })
