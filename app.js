@@ -43,7 +43,11 @@ try {
   if(!fs.existsSync(conffile)) conffile="path.conf"
   const data = fs.readFileSync(conffile, 'utf8');
   for(let l of data.split("\n")){
-    AddBroadcastRouter(l.trim())
+    let p=l.trim()
+    if(p!=""){
+      console.log(`add path ${p}`)
+      AddBroadcastRouter(p)
+    }
   }
 } catch (err) {
   console.error(err);
