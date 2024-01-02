@@ -90,6 +90,6 @@ try {
   console.error(err);
 }
 
-app.listen(port, () => {
+app.listen(port,'0.0.0.0', () => {
   console.log(`listening on port ${port}`)
 })
