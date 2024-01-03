@@ -11,7 +11,7 @@
 <input id="data"/><button id="send">发送</button>
 <div id="resdata"></div>
 <script>
-    var ws = new ReconnectingWebSocket(`ws://${window.location.host}/report/gp1`);
+    var ws = new ReconnectingWebSocket(`ws://${window.location.host}/push/zhanyao8group`);
     $("#send").on("click",async function(){
         let data=$("#data").val()
         await axios.post("/report/gp1",json={"data":data})
