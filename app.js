@@ -7,7 +7,7 @@ const uuid=require('uuid')
 const fs = require('node:fs');
 const { parse } = require('node:path');
 
-const port = 6000
+const port = 6001
 
 const logger = winston.createLogger({
   level: 'info',
